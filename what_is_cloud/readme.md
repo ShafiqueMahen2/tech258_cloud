@@ -30,17 +30,19 @@ The Public Cloud is a shared cloud among multiple users and is therefore typical
 A Hybrid Cloud is a mixed computing environment where applications and services are run in different environments (public and private), including on-premise data centers. This is the most widespread option because in the current day, almost no one relies entirely on a single public cloud.
 
 ### Multi-Cloud
-A Multi-Cloud is when an organisatioin uses cloud computing services from at least two different cloud providers to run their applications. These multi-cloud environments typically include a combination of two or more public clouds, two or more private clouds or some combination of both.
+A Multi-Cloud is when an organisation uses cloud computing services from at least two different cloud providers to run their applications. These multi-cloud environments typically include a combination of two or more public clouds, two or more private clouds or some combination of both.
 
 ## Types of Cloud Services: IaaS, PaaS, SaaS
+![differences_between_iaas_paas_saas](images/differences_between_iaas_paas_saas.png)
+
 ### Infrastructure as a Service (IaaS)
-IaaS is a type of cloud computing service that offers essential compute, storage, and networking resources on demand. With IaaS, users have full control over the operating systems, applications and middleware deployed on the virtualised infrastructure. Some examples include, AWS EC2, Azure Virtual Machines and Google Cloud Compute Engine.
+IaaS is a type of cloud computing service that offers essential compute, storage, and networking resources on demand. With IaaS, users have full control over the operating systems, applications and middleware deployed on the virtualized infrastructure. Some examples include, AWS EC2, Azure Virtual Machines and Google Cloud Compute Engine.
 
 ### Platform as a Service (PaaS)
 PaaS is a type of cloud computing service that offers a complete development and deployment environment in the cloud. This gives resources that enable you to deliver everything from simple cloud-based apps to sophisticated, cloud-enabled enterprise applications. This service also takes away the complexity of building and maintaining the underlying infrastructure. Some examples include, Heroku, AWS Elastic Beanstalk and OpenShift.
 
 ### Software as a Service (SaaS)
-SaaS is a type of cloud computing service that leverages the internet to deliver applications which are managed by a third-party vendor, to it's users. You rent the use of an app for your organisation which allows you to quickly get the app up and running at minimal upfront cost. Some examples include, Dropbox, Microsoft Office 365, Netflix.
+SaaS is a type of cloud computing service that leverages the internet to deliver applications which are managed by a third-party vendor, to its users. You rent the use of an app for your organisation which allows you to quickly get the app up and running at minimal upfront cost. Some examples include, Dropbox, Microsoft Office 365, Netflix.
 
 ## What are the advantages/disadvantages of the cloud?
 ### Advantages
@@ -57,17 +59,17 @@ SaaS is a type of cloud computing service that leverages the internet to deliver
 ## Difference between OpEx and CapEx
 Operating Expenditure (OpEx) and Capital Expenditure (CapEx) are two terms used to understand the impact cloud computing may have on business expenditure.
 
-## OpEx
-OpEx is the ongoing cost associated with the day-to-day operations of running and maintaing IT infrastructure. Some examples are Cloud service fees, IT staff salaries and internet costs.
+### OpEx
+OpEx is the ongoing cost associated with the day-to-day operations of running and maintaining IT infrastructure. Some examples are Cloud service fees, IT staff salaries and internet costs.
 
-## CapEx
+### CapEx
 CapEx is the upfront costs associated with acquiring and deploying IT hardware and software. Some examples including, purchasing servers, upgrading data centers or buying software licenses.
 ## Is migrating to the cloud always cheaper?
 Although the cloud is generally cost-saving, there may be some situations where moving to the cloud could result in being more expensive.
 
 For example, if your organisation has stable workloads and predictable usage patterns, such as systems with low demand variability, the cost savings from the agility that comes with the cloud may be minimal, so it may be more beneficial to stay with on-premise hardware.
 
-## Marketshare Breakdown - What are the 3 largest providers known for?
+## Market-share Breakdown - What are the 3 largest providers known for?
 ![cloud_market_share.jpeg](images/cloud_market_share.jpeg)
 From diagram above we can see that:
 
@@ -77,8 +79,15 @@ From diagram above we can see that:
 - Other providers like IBM Cloud and Alibaba Cloud share the remaining market share, catering to more niche needs.
 
 ## Which cloud provider is the best in your opinion?
-
-## What sorts of things do you usually need to pay for when using the cloud?
+In my opinion, I think Amazon Web Services (AWS) is the best cloud provider. This is because of the vast library of services they offer on their platform and due to it having the greatest market share, it is easy to find documentation and discussions about how to use certain tools available on the Internet when you need help deploying a service.
 
 ## What are the 4 pillars of DevOps? How do they link into the cloud?
+
+The 4 Pillars of DevOps are:
+
+- **Culture**: DevOps emphasises a collaborative and culture-driven approach to software development. This involves fostering trust, communication and shared responsibility among development and other stakeholders. In the cloud, organisations can leverage cloud-native tools like shared repositories and chat platforms to create and establish this culture across distributed teams.
+- **Collaboration**: Better collaboration across different teams will help them achieve a streamlined process helping the team in preparing the best approach in terms of target infrastructure. In terms of the cloud, collaboration could be achieved when using different cloud services.
+- **Automation**: The most known pillar of DevOps. This plays a crucial role in the continuous delivery and deployment of software through automated pipelines. In the cloud, organisations can leverage cloud automation services, like AWS CloudFormation to automate the provisioning and management of cloud resources, reducing manual effort. Automatic scaling up/down based on demand can be achieved as well, using features like Auto Scaling Groups (ASGs).
+- **Monitoring**: This involves establishing metrics and monitoring systems to continuously assess and improve the quality and efficiency of software delivery and operations. In the cloud, organisations can leverage cloud monitoring through the vast library of monitoring tools provided by cloud providers, such as AWS CloudWatch and Azure Monitor. These help identify performance bottlenecks and thus drive continuous improvement ideas.
+
 
