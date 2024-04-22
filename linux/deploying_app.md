@@ -67,7 +67,7 @@ sudo systemctl enable nginx
 echo nginx enabled!
 
 ## install node.js v20
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && sudo apt-get install nodejs -y
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs
 echo Node.js v20 installed!
 
 echo check node js version
