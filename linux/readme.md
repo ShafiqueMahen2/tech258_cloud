@@ -1,5 +1,35 @@
 # Tech 258 - Linux
 
+- [Tech 258 - Linux](#tech-258---linux)
+  - [General Commands](#general-commands)
+    - [uname](#uname)
+    - [whoami](#whoami)
+    - [history](#history)
+    - [ps](#ps)
+    - [curl](#curl)
+    - [sudo](#sudo)
+    - [chmod](#chmod)
+    - [systemctl](#systemctl)
+    - [printenv](#printenv)
+    - [export](#export)
+  - [Commands that work with files](#commands-that-work-with-files)
+    - [file](#file)
+    - [ls](#ls)
+    - [ll](#ll)
+    - [mv](#mv)
+    - [cp](#cp)
+    - [rm](#rm)
+    - [touch](#touch)
+    - [nano](#nano)
+    - [cat](#cat)
+    - [grep](#grep)
+  - [Commands that work with directories](#commands-that-work-with-directories)
+    - [mkdir](#mkdir)
+    - [rm -r](#rm--r)
+    - [cd](#cd)
+    - [pwd](#pwd)
+
+
 ## General Commands
 These are common commands used to give us more information about general things like the shell itself or about the user.
 
@@ -14,7 +44,7 @@ uname
 Example output: <br>
 ![uname_usage.png](images/uname_usage.png)
 
-## whoami
+### whoami
 This command tells us what user we are. 
 
 Usage:
@@ -25,7 +55,7 @@ whoami
 Example output: <br>
 ![whoami_usage.png](images/whoami_usage.png)
 
-## history
+### history
 This command keeps a log of the last 500 commands we have used previously. We can use the `-c` flag to clear the log.
 
 Usage:
@@ -36,7 +66,7 @@ history
 Example output: <br>
 ![history_usage.png](images/history_usage.png)
 
-## ps
+### ps
 This command will list the currently running processes. We can use the `-p` flag to identify a specific process. In this case we can flag `$$` to identify the current shell process.
 
 Usage:
@@ -47,7 +77,7 @@ ps -p $$
 Example output: <br>
 ![ps_usage](images/ps_usage.png)
 
-## curl
+### curl
 This command is the primary way to transfer data i.e. download files. We will use the `--output` flag to store this data in a file.
 
 Usage:
@@ -60,7 +90,7 @@ Example output: <br>
 
 As you can see, we have downloaded the image from the given url and have stored the image in a file called `cat.jpg`.
 
-## sudo
+### sudo
 This command, standing for "super user do", is used to preface any other command to run said command with elevated privileges e.g. for administrative tasks.
 
 Usage:
@@ -73,7 +103,7 @@ Example output: <br>
 
 We used `sudo` to give us superuser privileges in order to start the `nginx` service.
 
-## chmod
+### chmod
 This command will allow for an administrator to set or modify a file or directory's permissions.
 
 There are 3 groups you will have to set permissions for being:
@@ -95,7 +125,7 @@ Example output: <br>
 
 In this case, we have given every type of user read, write and execute privileges to the file `cat.jpg`.
 
-## systemctl
+### systemctl
 This command is used to control a system process. It has many uses e.g. starting, stopping, enabling, restarting, checking the status of a service, etc. This is normally a good time to use `sudo` as a prefix.
 
 Usage:
@@ -108,7 +138,7 @@ Example output: <br>
 
 In this case, we checked the status of the `nginx` service.
 
-## printenv
+### printenv
 This command is used to print out a list of our environmental variables. We can also specify to print a certain environmental variable, but if left blank it'll print them all.
 
 Usage:
@@ -121,7 +151,7 @@ Example output: <br>
 
 In this case, we have printed out the environmental variable `SHELL`. **Remember**: Linux is case-sensitive.
 
-## export
+### export
 This command is used to set a new environmental variable. This will only persist for this current session, if we want it to persist, we will have to manually add it to the `.bashrc` hidden file.
 
 Usage:
@@ -138,7 +168,7 @@ In this case, we have set the variable `MYNAME` with the value `shafique`. We ca
 ## Commands that work with files
 These are common commands used when working with files.
 
-## file
+### file
 This command will tell us what type of file the specified file is.
 
 Usage:
@@ -152,7 +182,7 @@ Example output: <br>
 The output tells us that the file `cat.jpg` contains JPEG image data.
 
 
-## ls
+### ls
 This command will list the files and directories within our given directory. This is the most common command used to find your bearings!
 
 Usage:
@@ -165,7 +195,7 @@ Example output: <br>
 
 This output shows that within our home (~) directory, we have a `cat.jpg` file and a `'my pictures'` directory.
 
-## ll
+### ll
 This command is a more indepth version of ls, (similar to ls -a). It also displays extra information like, permissions, owners, last time modified, etc.
 
 Usage:
@@ -176,7 +206,7 @@ ll
 Example output: <br>
 ![ll_usage](images/ll_usage.png)
 
-## mv
+### mv
 This command is used to either move a file or rename a file.
 
 Usage:
@@ -189,7 +219,7 @@ Example output: <br>
 
 In this case, we use `ls` to verify that the file `cat.jpg` has been renamed to `cat2.jpg`
 
-## cp
+### cp
 This command is used to make a copy of a file.
 
 Usage:
@@ -202,7 +232,7 @@ Example output: <br>
 
 In this case, I made a copy of the `cat2.jpg` file in the `"my pictures"` directory.
 
-## rm
+### rm
 This command is used to remove files/directories. As this is the files section, we will remain with the basic usage case.
 
 Usage:
@@ -215,7 +245,7 @@ Example output: <br>
 
 In this case, `cat2.jpg` has been removed from the home directory.
 
-## touch
+### touch
 This command is used to make an empty file with specified name.
 
 Usage:
@@ -228,7 +258,7 @@ Example output: <br>
 
 We have created the file `newfile.txt` in the home directory.
 
-## nano
+### nano
 This command allows for us to make changes to a file, using the text-based editor `nano`.
 
 Usage:
@@ -246,7 +276,7 @@ When executing the command, it opens the `nano` editor where you can make change
 
 This should complete the editing process.
 
-## cat
+### cat
 This command will display the contents of a file.
 
 Usage:
@@ -259,7 +289,7 @@ Example output: <br>
 
 As we edited the `newfile.txt` file in the previous section, when we use `cat` to display the file, we can now see it has `Hello World!` as it's contents!
 
-## grep
+### grep
 This command allows for us to search for specific text patterns in files.
 
 Usage:
@@ -275,7 +305,7 @@ The output will also highlight the pattern we queried for, in this case, being `
 ## Commands that work with directories
 These are common commands used when working with directories.
 
-## mkdir
+### mkdir
 This command is used to create a new directory.
 
 Usage:
@@ -288,7 +318,7 @@ Example output: <br>
 
 The output displays the creation of `new_directory` within our home directory.
 
-## rm -r
+### rm -r
 This command is an extension of the `rm` command, adding the `-r` flag allows for the recursive deletion of directories.
 
 Usage:
@@ -301,7 +331,7 @@ Example output: <br>
 
 The output shows that `new_directory` has been deleted.
 
-## cd
+### cd
 This command is used to change what directory we are currently in. The current directory we are in should be taken into consideration as the path you take to change directory will be relative.
 
 Usage:
@@ -314,7 +344,7 @@ Example output: <br>
 
 As you can see, we have gone from the home directory `~` to the `'my pictures'` directory.
 
-## pwd
+### pwd
 This command is used to see what current directory we are working in.
 
 Usage:

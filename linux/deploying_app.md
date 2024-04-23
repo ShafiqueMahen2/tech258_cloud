@@ -1,5 +1,13 @@
 # Tech 258 - Deploying Sparta Test Application
 
+- [Tech 258 - Deploying Sparta Test Application](#tech-258---deploying-sparta-test-application)
+  - [How do we securely transfer files to the Virtual Machine?](#how-do-we-securely-transfer-files-to-the-virtual-machine)
+    - [Method 1 - Using SCP](#method-1---using-scp)
+    - [Method 2 - Cloning GitHub Repo](#method-2---cloning-github-repo)
+  - [Running the Application](#running-the-application)
+  - [Automation](#automation)
+
+
 ## How do we securely transfer files to the Virtual Machine?
 
 There are two different methods: <br>

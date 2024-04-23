@@ -1,5 +1,14 @@
 # Tech 258 - Linux Processes
 
+- [Tech 258 - Linux Processes](#tech-258---linux-processes)
+  - [How do we view processes?](#how-do-we-view-processes)
+    - [ps aux command](#ps-aux-command)
+    - [How do we filter the `top` command output?](#how-do-we-filter-the-top-command-output)
+  - [How do we run a process in the background?](#how-do-we-run-a-process-in-the-background)
+  - [Parent and Child Processes](#parent-and-child-processes)
+  - [How do we kill a process?](#how-do-we-kill-a-process)
+
+
 ## How do we view processes?
 To view processes we can use the `ps` command for a snapshot, or the `top` command which will show the top processes in a up-to-date, real-time view. There is also the `jobs` command, which is mainly for viewing background processes.
 
