@@ -67,7 +67,7 @@ sudo systemctl enable nginx
 echo nginx enabled!
 
 ## install node.js v20
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo DEBIAN_FRONTEND=noninteractive -E bash - && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs
 echo Node.js v20 installed!
 
 echo check node js version
@@ -81,7 +81,7 @@ echo Cloning complete!
 
 # cd app folder
 echo changing to app directory...
-cd tech258_sparta_test_app/app
+cd ~/tech258_sparta_test_app/app
 echo done!
 
 # install app
@@ -89,8 +89,18 @@ echo installing node js app..
 npm install
 echo node js app has been installed!
 
-# run app
-echo running node js app...
-npm start app.js &
+# install pm2
+echo installing pm2...
+sudo npm install pm2 -g
+echo pm2 has been installed!
+
+# stop existing 'app' node process
+echo stopping existing 'app' node process...
+pm2 stop app
+echo existing node processes terminated!
+
+# run app (with pm2)
+echo running node js app with pm2...
+pm2 start app.js app
 ```
 
