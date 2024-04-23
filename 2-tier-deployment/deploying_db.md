@@ -1,6 +1,16 @@
 # Tech 258 - Deploying Sparta Test DB
 
 - [Tech 258 - Deploying Sparta Test DB](#tech-258---deploying-sparta-test-db)
+  - [Step 1 - Create a MongoDB instance](#step-1---create-a-mongodb-instance)
+  - [Step 2 - Update \& Upgrade packages](#step-2---update--upgrade-packages)
+  - [Step 3 - Install gnupg \& curl packages](#step-3---install-gnupg--curl-packages)
+  - [Step 4 - Downloading the MongoDB GPG Key](#step-4---downloading-the-mongodb-gpg-key)
+  - [Step 5 - Creating a list file for MongoDB](#step-5---creating-a-list-file-for-mongodb)
+  - [Step 6 - Installing MongoDB](#step-6---installing-mongodb)
+  - [Step 7 - Configure BindIP](#step-7---configure-bindip)
+  - [Step 8 - Restart \& Enable MongoDB](#step-8---restart--enable-mongodb)
+  - [Step 9 - Connecting App and DB instances](#step-9---connecting-app-and-db-instances)
+
 
 ## Step 1 - Create a MongoDB instance
 Using the AWS console, we can create another EC2 instance which will hold our MongoDB DB for our application. Once we have configured this database, we will then establish a connection with our App EC2 instance.
