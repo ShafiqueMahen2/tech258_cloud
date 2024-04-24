@@ -37,11 +37,27 @@ Pre-requisites: <br>
 git clone <github_repo_link.git>
 ```
 
-## Running the Application
+## Configuring nginx reverse proxy
+To access our node application we would have to manually add `:3000` to the end of our URL. In order to automate this, we can use a reverse proxy to redirect automatically to this port. We can do this by editing the nginx config file that is found at the following path: <br>
+`etc/nginx/sites-available/default`.
+
+We can then go a step further and automate this process using the command below:
+```
+sudo sed -i '51s/.*/                proxy_pass http:\/\/localhost:3000;/' /etc/nginx/sites-available/default
+```
+
+## Running the Application - with npm
 1) You will need to make sure you are in the `app` directory using the `cd` command.
 2) Install node.js v20.
 3) Install the app using `npm install`.
 4) Running the app using `npm start`.
+
+## Running the Application - with pm2
+1) You will need to make sure you are in the `app` directory using the `cd` command.
+2) Install node.js v20.
+3) Install the app using `npm install`.
+4) Use `npm` to install `pm2` using the command `sudo npm install pm2 -g`
+5) Running the app with pm2 using `pm2 start app.js`.
 
 ## Automation
 Once each step has been verified manually, we can make a Bash script to automate this process:
@@ -63,6 +79,11 @@ echo upgrade complete!
 echo installing nginx...
 sudo DEBIAN_FRONTEND=noninteractive apt install nginx -y
 echo nginx install complete!
+
+# configure reverse proxy
+echo configuring reverse proxy to pass to port 3000...
+sudo sed -i '51s/.*/                proxy_pass http:\/\/localhost:3000;/' /etc/nginx/sites-available/default
+echo reverse proxy configured!
  
 # restart nginx
 echo restarting nginx...
