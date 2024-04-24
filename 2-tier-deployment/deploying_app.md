@@ -4,7 +4,9 @@
   - [How do we securely transfer files to the Virtual Machine?](#how-do-we-securely-transfer-files-to-the-virtual-machine)
     - [Method 1 - Using SCP](#method-1---using-scp)
     - [Method 2 - Cloning GitHub Repo](#method-2---cloning-github-repo)
-  - [Running the Application](#running-the-application)
+  - [Configuring nginx reverse proxy](#configuring-nginx-reverse-proxy)
+  - [Running the Application - with npm](#running-the-application---with-npm)
+  - [Running the Application - with pm2](#running-the-application---with-pm2)
   - [Automation](#automation)
 
 

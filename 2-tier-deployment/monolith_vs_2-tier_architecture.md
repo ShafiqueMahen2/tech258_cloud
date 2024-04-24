@@ -1,4 +1,13 @@
 # Tech 258 - Monolith vs 2-Tier Architecture
+
+- [Tech 258 - Monolith vs 2-Tier Architecture](#tech-258---monolith-vs-2-tier-architecture)
+  - [What is Monolith?](#what-is-monolith)
+    - [Advantages](#advantages)
+    - [Disadvantages](#disadvantages)
+  - [What is 2-Tier Architecture](#what-is-2-tier-architecture)
+    - [Advantages](#advantages-1)
+    - [Disadvantages](#disadvantages-1)
+
 ## What is Monolith?
 Monolith, also known as Monolithic Architecture, is an software engineering approach where all parts of the software are packaged together and unified within a single server.
 
