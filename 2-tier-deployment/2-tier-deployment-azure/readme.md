@@ -59,7 +59,5 @@ In our Azure deployment we had to configure a VNet to deploy our resources in wh
 Also, configuring security groups in Azure & AWS are slightly different. In AWS, the console is more user friendly and straight forward to accomplish this task whereas in Azure you would have to find the `Advanced` settings option when configuring your VM on the `Network Security Group` section and configure your custom security group there before adding it to your VM configuration.
 
 ## Why do we not have to specify MongoDB's port?
-In Azure, when using Azure Cosmos DB's API for MongoDB, you do not need to declare or open port 27017 for MongoDB. Azure Cosmos DB's API for MongoDB is a fully managed service that abstracts the underlying infrastructure and networking details from you.
- 
-Azure Cosmos DB handles the management of ports, endpoints, and connectivity internally, so you can directly connect to your Azure Cosmos DB instance using the connection string provided in the Azure portal or through the SDK of your choice without worrying about port configurations.
+When connecting our App and DB instances we use the private IP which avoids the need to open port 27017 in our security group. By default, Azure allows connections within the same VNet and stays within the VNet when we use the private IP.
 
