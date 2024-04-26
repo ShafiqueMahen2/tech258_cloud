@@ -59,5 +59,11 @@ In our Azure deployment we had to configure a VNet to deploy our resources in wh
 Also, configuring security groups in Azure & AWS are slightly different. In AWS, the console is more user friendly and straight forward to accomplish this task whereas in Azure you would have to find the `Advanced` settings option when configuring your VM on the `Network Security Group` section and configure your custom security group there before adding it to your VM configuration.
 
 ## Why do we not have to specify MongoDB's port?
-When connecting our App and DB instances we use the private IP which avoids the need to open port 27017 in our security group. By default, Azure allows connections within the same VNet and stays within the VNet when we use the private IP.
+By default, when you first create a security group, one of the default rules is to allow any internal traffic, on any port, within your VNet. All devices on the inside of your VNet can communicate with each other, even if they're in separate subnets. 
+
+This is another reason why Azure is different as you have to manually open up the port on AWS. Internal traffic isn't allowed on every port by default on AWS.
+
+## What happens if we specify the Public IP of our DB VM on DB_HOST?
+
+It is still possible to connect both tiers this way but it doesn't make much sense from a security perspective. By using the public IP, we would have to set up the DB port on the DB VM manually i.e open the inbound port 27017 (MongoDB) on the DB VM. This is because we are now directing our traffic from outside of the VNet; it's like going outside the apartment and going back in to enter the DB VM 'room', whereas if we were to use the Private IP we are simply traversing the secure apartment.
 
