@@ -1,4 +1,12 @@
 # Tech 258 - Using User Data & Images
+- [Tech 258 - Using User Data \& Images](#tech-258---using-user-data--images)
+  - [Utilising User Data](#utilising-user-data)
+  - [Creating an Image](#creating-an-image)
+    - [Testing our images](#testing-our-images)
+    - [Differences between Generalised v Specialised Images](#differences-between-generalised-v-specialised-images)
+    - [How do we tell if our Image is Generalised/Specialised?](#how-do-we-tell-if-our-image-is-generalisedspecialised)
+  - [Troubleshooting our deployment](#troubleshooting-our-deployment)
+    - [Case: App doesn't deploy automatically](#case-app-doesnt-deploy-automatically)
 
 ## Utilising User Data
 To speed up our deployment even more, instead of needing to SSH into our instance to run our scripts we can bootstrap our virtual machines with the script that will execute once the virtual machine resource is ready.
