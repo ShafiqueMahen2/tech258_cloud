@@ -22,8 +22,11 @@
     - [Setting up our Scale Set](#setting-up-our-scale-set)
       - [Prerequisites](#prerequisites)
       - [Steps](#steps)
-      - [Cleaning up order](#cleaning-up-order)
+      - [Cleaning up - Order](#cleaning-up---order)
     - [Troubleshooting](#troubleshooting)
+      - [Case: Load Balancer - Creating an Unhealthy Instance](#case-load-balancer---creating-an-unhealthy-instance)
+        - [Why does this work?](#why-does-this-work)
+        - [Does the Load Balancer do it's job?](#does-the-load-balancer-do-its-job)
       - [Case: 502 Bad Gateway](#case-502-bad-gateway)
       - [Case: Trying to SSH into our VMs](#case-trying-to-ssh-into-our-vms)
 
@@ -126,6 +129,7 @@ To do put this in place use the following parameters:
 
 #### Load Balancer
 A load balancer is essential to our highly available + scalable solution in many ways:
+- **Load Distribution**: Our load balancer's primary purpose is to uniformly balance the incoming traffic across our app machine infrastructure. This will help mitigate the chance of our App CPU's from spiking i.e. disrupting our service.
 - **Security**: We can now use the Load Balancer to handle traffic that originates from outside of our network, rather than directly using the public IP addresses of our app VMs.
 - **Health Checks**: We can configure our load balancer to monitor the health of our machines. If it doesn't receive an OK status code for a length longer than our grace period specified, we can configure the load balancer to automatically delete and recreate another instance of our machines.
 - **Manoeuvrability**: As the load balancer attaches onto our scale set, it gives us the flexibility to move it around to different sets if necessary.
@@ -172,19 +176,37 @@ Before we can set up a scale set, we need to be absolutely certain that we have 
 8) Add relevant `Tags`.
 9) `Review + Create` when ready!
 
-#### Cleaning up order
+#### Cleaning up - Order
 1) Delete the Scale Set itself
 2) Delete Load Balancer
 3) Delete Public IP address of Load Balancer
 
 ### Troubleshooting
 
+#### Case: Load Balancer - Creating an Unhealthy Instance
+We can create an unhealthy instance for testing purposes, like testing if our Load Balancer works automatically. We can do this by:
+1) `Stop` the instance.
+2) `Start` the instance.
+
+##### Why does this work?
+We used `User Data` to start running our application. If we were to restart our instance, this `User Data` isn't run again so the app is no longer running on that particular machine.
+
+Therefore, when the Load Balancer tries to connect to it, it will not receive a status code of 200 and will therefore mark it's `Health State` as `Unhealthy`. Example: <br>
+![troubleshooting_unhealthy_vm.png](images/troubleshooting_unhealthy_vm.png)
+
+##### Does the Load Balancer do it's job?
+After the grace period has expired, the load balancer should automatically get rid of this `Unhealthy` instance and replace it with a new instance. Example: <br>
+![troubleshooting_load_balancer_job.png](images/troubleshooting_load_balancer_job.png)
+
+As you can see, the Load Balancer has started to delete the faulty machine and has started creating a new machine to take its place. It is currently marked as `Unhealthy` as it isn't fully configured/up and running yet!
+
 #### Case: 502 Bad Gateway
 In this case, our application isn't running correctly. There are some checks we can do:
 1) Make sure we have used the right image/an image that had been tested separately i.e. is ready to run.
-2) Our `User Data` could have a mistake. We could address this by:
+2) Check if our VM states are `Healthy`.
+3) Our `User Data` could have a mistake. We could address this by:
    - Go to `Settings > Operating System`
-   - Check your `User Data` modify if necessary. Example: <br>
+   - Check your `User Data` and modify if necessary. Example: <br>
    ![troubleshooting_user_data_demo.png](images/troubleshooting_user_data_demo.png)
    - `Reimage` your instances to restore them to initial state.
    - `Upgrade` your instances to bring them to the latest versions (utilise modified user data).
