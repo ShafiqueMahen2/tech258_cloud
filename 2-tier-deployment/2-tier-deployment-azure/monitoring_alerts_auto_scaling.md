@@ -195,8 +195,8 @@ As we have removed the public IPs of our VMs, we can no longer reach them outsid
 ssh -i ~/.ssh/<azure_key> -p <start of NAT range> <user>@<public_IP_of_LB>
 ```
 
-Breaking the command down:
-`-i` - Use public key file stored locally
+Breaking the command down: <br>
+`-i` - Use public key file stored locally. <br>
 `-p` - Specify port that the LB is listening to that specifically redirects to Port 22 (SSH) in the Backend.
 
 **Note:** If we want to connect to our second instance, reflect this in the `-p` flag e.g. if our range starts at `50000`, we have to use port `50001` to connect to our second machine.
