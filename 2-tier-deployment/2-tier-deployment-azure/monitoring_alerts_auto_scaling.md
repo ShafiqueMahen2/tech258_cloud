@@ -69,8 +69,8 @@ ab -n 40000 -c 300 http://<app VM's IP address>/
 ```
 
 ### Understanding the Results
-After running the command you would get an output like this:
-![](images/apache_bench_results.png)
+After running the command you would get an output like this: <br>
+![apache_bench_results.png](images/apache_bench_results.png)
 
 The main points to understand would be the longest request (100%) and 50% of requests time to gauge where to set our threshold, so in our case it took 208ms on average to serve 50% of the requests tested.
 
