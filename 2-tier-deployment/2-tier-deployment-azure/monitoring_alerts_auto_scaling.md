@@ -137,7 +137,7 @@ A load balancer is essential to our highly available + scalable solution in many
 #### Summary
 High Availability: 
 - VMs deployed over multiple AZ's
-- We have a backup VM (by default/within Min/Max range)
+- We have a backup VM (by default and number of VMs will stay within Min/Max range)
 
 Scalability:
 - VMs created/remove when our `Scale out` and `Scale in` thresholds are met respectively.
@@ -218,7 +218,7 @@ ssh -i ~/.ssh/<azure_key> -p <start of NAT range> <user>@<public_IP_of_LB>
 ```
 
 Breaking the command down: <br>
-`-i` - Use public key file stored locally. <br>
+`-i` - Use private key file stored locally. <br>
 `-p` - Specify port that the LB is listening to that specifically redirects to Port 22 (SSH) in the Backend.
 
 **Note:** If we want to connect to our second instance, reflect this in the `-p` flag e.g. if our range starts at `50000`, we have to use port `50001` to connect to our second machine.
