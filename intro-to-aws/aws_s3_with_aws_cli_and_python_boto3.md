@@ -1,5 +1,28 @@
 # Tech 258 - AWS S3 with AWS CLI & Python Boto3 SDK
 
+- [Tech 258 - AWS S3 with AWS CLI \& Python Boto3 SDK](#tech-258---aws-s3-with-aws-cli--python-boto3-sdk)
+  - [Preparing an EC2 instance to use](#preparing-an-ec2-instance-to-use)
+    - [Steps](#steps)
+  - [Using the AWS CLI for S3](#using-the-aws-cli-for-s3)
+    - [Creating a S3 bucket](#creating-a-s3-bucket)
+    - [Checking for a specific S3 bucket](#checking-for-a-specific-s3-bucket)
+    - [Creating a sample file to put into our S3 bucket](#creating-a-sample-file-to-put-into-our-s3-bucket)
+    - [Uploading the sample file to our S3 bucket](#uploading-the-sample-file-to-our-s3-bucket)
+    - [Downloading files from our S3 bucket to our current directory](#downloading-files-from-our-s3-bucket-to-our-current-directory)
+    - [Deleting a file from our S3 bucket](#deleting-a-file-from-our-s3-bucket)
+    - [Deleting all files in our S3 bucket](#deleting-all-files-in-our-s3-bucket)
+    - [Removing the S3 bucket itself](#removing-the-s3-bucket-itself)
+  - [Using Python Boto3 SDK for S3](#using-python-boto3-sdk-for-s3)
+    - [Check if Boto3 is installed on our instance](#check-if-boto3-is-installed-on-our-instance)
+    - [Script: List all the S3 buckets](#script-list-all-the-s3-buckets)
+    - [Script: Create an S3 bucket](#script-create-an-s3-bucket)
+    - [Script: Upload data/file to the S3 bucket](#script-upload-datafile-to-the-s3-bucket)
+    - [Script: Download/retrieve content/file from the S3 bucket](#script-downloadretrieve-contentfile-from-the-s3-bucket)
+    - [Script: Delete content/file from the S3 bucket](#script-delete-contentfile-from-the-s3-bucket)
+    - [Script: Delete all content/files from the S3 bucket](#script-delete-all-contentfiles-from-the-s3-bucket)
+    - [Script: Delete the S3 bucket itself](#script-delete-the-s3-bucket-itself)
+
+
 ## Preparing an EC2 instance to use
 Let's create an EC2 instance with AWS CLI and Python Boto3 configured.
 ### Steps
@@ -51,57 +74,72 @@ To get familiar with all of the S3 commands we can run the following command:
 aws s3 help
 ```
 
-### Creating a S3 bucket via CLI: 
+### Creating a S3 bucket
 To do this we would have to use the `aws s3 mb` command. Example usage below:
 ```
 aws s3 mb s3://<name of bucket> --region <region e.g. us-west-1>
 ```
 Example output: <br>
-![]()
+![aws_cli_mb_command.png](images/aws_cli_mb_command.png)
 
-### Checking for a specific S3 bucket via CLI: 
+### Checking for a specific S3 bucket 
 ```
 aws s3 ls s3://<name of bucket>
 ```
-### Creating a sample file to put into our S3 bucket: 
+Example output: <br>
+![aws_cli_ls_command.png](images/aws_cli_ls_command.png)
+### Creating a sample file to put into our S3 bucket 
 ```
 echo This is the first line in a test file > test.txt
 ```
 
-How to upload the sample file to our S3 bucket: 
+### Uploading the sample file to our S3 bucket
 ```
 aws s3 cp <filename> s3://<bucket name>
 ``` 
+Example output: <br>
+![aws_cli_cp_command.png](images/aws_cli_cp_command.png)
 
-How to download files from our S3 bucket to our current directory: 
+### Downloading files from our S3 bucket to our current directory
 ```
 aws s3 sync s3://<bucket name> .
 ```
+Example output: <br>
+![aws_cli_sync_command.png](images/aws_cli_sync_command.png)
 
 Can check using: `ls` Example output: <br>
 
-How to delete a file from our S3 bucket: 
+### Deleting a file from our S3 bucket 
 ```
 aws s3 rm s3://<name of bucket>/<name of file to remove>
 ```
+Example output: <br>
+![aws_cli_rm_command.png](images/aws_cli_rm_command.png)
 
-:exclamation_mark: Warning! Will delete the file specified from the bucket without asking you to confirm.
+:exclamation_mark: Warning! Will delete the file specified from the bucket without asking you to confirm. :exclamation_mark:
 
-How to delete all files in our S3 bucket: 
+### Deleting all files in our S3 bucket
 ```
 aws s3 rm s3://<bucket name> --recursive
 ```
+Example output: <br>
+![aws_cli_rm_recursive_command.png](images/aws_cli_rm_recursive_command.png)
 
-:warning: Danger! Will delete everything in the bucket without asking you to confirm.
+:warning: Danger! Will delete everything in the bucket without asking you to confirm. :warning:
 
-How to remove the S3 bucket itself: 
+### Removing the S3 bucket itself
 ```
 aws s3 rb s3://<bucket name>
 ```
 
-If trying to delete when bucket isn't empty it won't let you delete the bucket.
+If trying to delete when bucket isn't empty it won't let you delete the bucket. To force delete use the `--force` flag.
 
-:boom: Extreme danger! Will delete the bucket **AND** everything in the bucket without asking you to confirm.
+You can check if the bucket is deleted by using the `aws s3 ls` command.
+
+Example output: <br>
+![aws_cli_rb_command.png](images/aws_cli_rb_command.png)
+
+:boom: Extreme danger! Will delete the bucket **AND** everything in the bucket without asking you to confirm. :boom:
 
 ## Using Python Boto3 SDK for S3
 We can also manage our AWS resources programatically. To do this we can leverage the Python SDK for AWS: Boto3.
