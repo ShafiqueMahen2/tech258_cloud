@@ -105,7 +105,7 @@ Our configuration should look something like this: <br>
 ![app_vm_configuration_demo.png](images/nva_vm_configuration_demo.png)
 
 ### Step 5 - Creating our Traffic Route
-We want to direct traffic through a certain path (public -> DMZ -> private), we can achieve this through creating a route table.
+We want to direct traffic through a certain path (public -> NVA VM -> private), we can achieve this through creating a route table.
 
 1) Go to the `Route Table` section on Azure Portal.
 2) Click `Create`
