@@ -154,6 +154,7 @@ sudo apt upgrade -y
 sysctl net.ipv4.ip_forward
 ```
 If set to `0` it is disabled, if set to `1` it is enabled.
+
 4) If disabled we have to edit our `sysctl.conf` file, we can do this with the command:
 ```
 sudo nano/etc/sysctl.conf
