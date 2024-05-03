@@ -104,8 +104,66 @@ Example Networking section: <br>
 Our configuration should look something like this: <br>
 ![app_vm_configuration_demo.png](images/nva_vm_configuration_demo.png)
 
-### Step 5 - Enable IP-Forwarding on Azure (NIC) + NVA VM
+### Step 5 - Creating our Traffic Route
+We want to direct traffic through a certain path (public -> DMZ -> private), we can achieve this through creating a route table.
 
-### Step 6 - Create IP Rules Table
+1) Go to the `Route Table` section on Azure Portal.
+2) Click `Create`
+#### Key areas of configuration:
+##### Basics section
+- `Region`: Make sure it is in the same region as your infrastructure, in our case its `UK South`.
+- `Name`: Enter a name that is easily identifiable e.g. `tech258-shafique-to-private-subnet-rt`
 
-### Step 7 - Restrict Bind IP to App VM only
+##### Review + Create section
+Our configuration should look something like this: <br>
+![route_table_configuration_demo.png](images/route_table_configuration_demo.png)
+
+3) Now that we have created our table, we have to create our Route. Go to `Settings > Routes`
+#### Key areas of configuration:
+- `Route Name`: Enter a name that is easily identifiable e.g. `to-private-subnet-route`
+- `Destination type`: IP Addresses
+- `Destination IP addresses/CIDR range`: Use the CIDR Block associated to the private subnet (10.0.4.0/24)
+- `Next hop type`: As we are using a NVA to manage traffic, select `Virtual Appliance`
+- `Next hop address`: Enter the private IP address of the NVA VM (10.0.3.4) <br>
+Example configuration: <br>
+![route_configuration_demo.png](images/route_configuration_demo.png)
+
+4) Now we can associate our table with the public subnet as thats where we want the traffic to **ONLY** come from. Go to `Settings > Subnets`.
+##### Key areas of configuration:
+- `Virtual network`: Choose our newly configured 3-subnet VNet.
+- `Subnet`: Choose our public subnet. <br>
+Example configuration: <br>
+![associate_subnet_demo.png](images/associate_subnet_demo.png)
+
+### Step 6 - Enable IP-Forwarding on Azure (NIC) + NVA VM
+#### On Azure
+1) Go to your NVA VM resource on Azure Portal.
+2) Go to `Networking > Network Settings`
+3) Click on the `Network interface / IP Configuration` link that comes up.
+4) Tick `Enable IP Forwarding`.
+
+#### NVA VM
+1) SSH into our NVA VM.
+2) Update and upgrade local packages using the commands:
+```
+sudo apt update -y
+sudo apt upgrade -y
+```
+3) Check if IP Forwarding is enabled already using the command:
+```
+sysctl net.ipv4.ip_forward
+```
+If set to `0` it is disabled, if set to `1` it is enabled.
+4) If disabled we have to edit our `sysctl.conf` file, we can do this with the command:
+```
+sudo nano/etc/sysctl.conf
+```
+5) Uncomment the line: `#net.ipv4.ip_forward=1`
+6) Restart the `sysctl` process using the command:
+```
+sudo sysctl -p
+```
+
+### Step 7 - Create IP Rules Table
+
+### Step 8 - Restrict Bind IP to App VM only
