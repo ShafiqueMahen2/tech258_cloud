@@ -186,8 +186,8 @@ s3 = boto3.client('s3')
 bucket_name = 'tech258-shafique-test-boto3'  
 
 # Create S3 bucket
-s3.create_bucket(Bucket=bucket_name)
-print(f"Bucket '{bucket_name}' created successfully.")
+s3.create_bucket(Bucket=bucket_name, CreateBucketConfiguration={'LocationConstraint': region})
+print(f"Bucket '{bucket_name}' created successfully in region {region}.")
 ```
 
 ### Script: Upload data/file to the S3 bucket
