@@ -36,7 +36,7 @@
       - [NVA VM](#nva-vm)
     - [Step 7 - Create IP Rules Table](#step-7---create-ip-rules-table)
     - [Step 8 - Restrict Bind IP to App VM only](#step-8---restrict-bind-ip-to-app-vm-only)
-    - [Steps](#steps-1)
+      - [Steps](#steps-1)
 
 
 ## What is a NVA?
@@ -262,7 +262,7 @@ echo ""
 ### Step 8 - Restrict Bind IP to App VM only
 Now we want to address our Bind IP. For testing purposes we allowed connections from anywhere to be established (0.0.0.0), but now we only want our App VM to establish the connection with the DB VM.
 
-### Steps
+#### Steps
 1) SSH into your App VM.
 2) Use the `scp` command to copy your SSH key from your local machine to your App VM.
 3) Use your App VM as a jumpbox to then SSH into our DB VM with our copied private key.
