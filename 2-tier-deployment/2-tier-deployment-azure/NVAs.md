@@ -166,5 +166,68 @@ sudo sysctl -p
 ```
 
 ### Step 7 - Create IP Rules Table
+When configuring the IP Rules table you must take extra caution to do the steps in order and correctly as failure in doing so could result in you being locked out of your instances, meaning you may have to start the process of setting up your NVA VM from scratch. We can use this script below to mitigate human error, ensuring accuracy.
+
+IP Rules Script: <br>
+```
+#!/bin/bash
+
+# configure iptables
+echo "Configuring iptables..."
+
+# Allow traffic on the loopback interface
+sudo iptables -A INPUT -i lo -j ACCEPT
+sudo iptables -A OUTPUT -o lo -j ACCEPT
+
+# Allow incoming traffic for established and related connections
+sudo iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# Allow outgoing traffic for established connections
+sudo iptables -A OUTPUT -m state --state ESTABLISHED -j ACCEPT
+
+# Drop incoming invalid packets or packets not from a valid connection
+sudo iptables -A INPUT -m state --state INVALID -j DROP
+
+# Allow incoming SSH (port 22) traffic for new and established connections
+sudo iptables -A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
+
+# Uncomment the following lines if you want to restrict SSH access to a specific subnet
+# sudo iptables -A INPUT -p tcp -s 10.0.2.0/24 --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+# sudo iptables -A OUTPUT -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
+
+# Uncomment the following lines if you want to allow outgoing SSH connections from NVA
+# sudo iptables -A OUTPUT -p tcp --dport 22 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+# sudo iptables -A INPUT -p tcp --sport 22 -m conntrack --ctstate ESTABLISHED -j ACCEPT
+
+# Allow forwarding TCP traffic from subnet 10.0.2.0/24 to 10.0.4.0/24 on port 27017 (MongoDB)
+sudo iptables -A FORWARD -p tcp -s 10.0.2.0/24 -d 10.0.4.0/24 --destination-port 27017 -m tcp -j ACCEPT
+
+# Allow forwarding ICMP (ping) packets from subnet 10.0.2.0/24 to 10.0.4.0/24
+sudo iptables -A FORWARD -p icmp -s 10.0.2.0/24 -d 10.0.4.0/24 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+# Set default policies to DROP for INPUT and FORWARD chains
+sudo iptables -P INPUT DROP
+sudo iptables -P FORWARD DROP
+
+echo "Done!"
+echo ""
+
+# Make iptables rules persistent
+echo "Make iptables rules persistent..."
+sudo DEBIAN_FRONTEND=noninteractive apt install iptables-persistent -y
+echo "Done!"
+echo ""
+```
 
 ### Step 8 - Restrict Bind IP to App VM only
+Now we want to address our Bind IP. For testing purposes we allowed connections from anywhere to be established (0.0.0.0), but now we only want our App VM to establish the connection with the DB VM.
+
+### Steps
+1) SSH into your App VM.
+2) Use the `scp` command to copy your SSH key from your local machine to your App VM.
+3) Use your App VM as a jumpbox to then SSH into our DB VM with our copied private key.
+4) Enter the following command, update `0.0.0.0` with the private IP of your App VM. Example command: <br>
+```
+sudo sed -i 's/bindIp: 127.0.0.1/bindIp: <private_IP_of_app_VM>/g' /etc/mongod.conf
+```
