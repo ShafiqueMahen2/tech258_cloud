@@ -52,6 +52,7 @@ Steps Overview:
 
 Job Plan Overview Diagram:
 ![](images/job_plan.png)
+
 ## Job 1 - Jenkins (CI)
 ### Steps
 1) First login to Jenkins on your Master Node (ec2) to use the Jenkins service.
@@ -137,6 +138,44 @@ As we can see our build has triggered a second time (#2). We have successfully c
 - Change `Branch Specifier` in `SCM` section to `*/dev` as we now want Jenkins to listen to changes on the `*/dev` branch now.
 
 ### Steps
+1) First login to Jenkins on your Master Node (ec2) to use the Jenkins service.
+2) Click `New Item` or `Create new job` (this option will show if the master node is fresh) to start making a job.
+3) Enter a `item name` that follows a suitable naming convention. (example: shafique-ci-merge) Select `Freestyle project` for this case. Click `OK` when ready to continue.
+4) For the first section (Important fields):
+   
+- `Description`: Enter description of job (example: Job to merge dev branch with main branch if shafique-ci job was successful)
+- Tick `GitHub Project` and enter `Project URL`. Put `.git` at the end of the URL.
+5) For the `Office 365 Connector` section (Important fields):
+   - Tick `Restrict where this project can be run`
+   - `Label Expression`: Give the name of our `agent node`. This node will execute the builds of this project. 
+**NOTE**: This is a common error you may get below. To get rid of this just get rid of the trailing space at the end of the label and it should recognise the label. Error example: <br>
+![common_label_expression_error_example.png](images/common_label_expression_error_example.png)
+6) For the `Source Code Management` section (Important fields):
+
+- Select `Git` as that's what we are using for SCM.
+- `Repository URL`: Enter the SSH URL for the repo, this can be found on your GitHub Repo by clicking the `Code` button and going to the `SSH` tab of the `Clone` section.
+**NOTE**: This is a common error you may get below. This is because Jenkins is trying to ping our repo but it doesn't have permissions due to us setting up SSH. Once we give it the corresponding private key in the `Credentials` tab (next step), this error should resolve itself. Error example: <br>
+![common_credentials_error_example.png](images/common_credentials_error_example.png)
+- `Credentials`: As we have previously assigned a public key to our repo, we need to give Jenkins the corresponding private key to authenticate with our repo. We therefore have to click `Add` and put in our private key there.
+Example credentials configuration: <br>
+![credentials_example.png](images/credentials_example.png)
+
+Example configuration (with common error corrected): <br>
+![scm_section_example.png](images/scm_section_for_job_2_example.png)
+
+- `Branches to build`: Update `Branch Specifier` to `*/dev` as that is the branch that we want to merge to `*/main`.
+- `Additional Behaviours`: Fill the fields with the following:
+  - `Name of repository`: origin
+  - `Branch to merge to main`: main
+  - `Merge strategy`: default
+  - `Fast-forward mode`: --ff
+- `Post-build Actions`: Select Git Publisher. Fill the fields with the following:
+  - Tick `Push Only if Build Succeeds`: This will act as another layer of assurance of only merging stable `*/dev` branches.
+  - Tick `Merge Results`: This will update our `*/main` branch on our GitHub Repo with the merged `*/dev*` branch.
+
+Example: <br>
+![](images/post_build_actions_for_job_2_example.png)
+
 
 ### Testing
 As we want Job 2 to trigger automatically after a successful Job 1:
@@ -144,6 +183,7 @@ As we want Job 2 to trigger automatically after a successful Job 1:
 - Go to `Post-build Actions` section and `Add post-build Action`.
 - Select `Build other projects` and enter name of `Job 2` in `Projects to build field`.
 
+Now we can push via our `*/dev` branch to our Repo and see if Job 2 works automatically once Job 1 has been deemed successful.
 
 ## Job 3 - Jenkins (CD)
 ### Steps
@@ -152,8 +192,3 @@ As we want Job 2 to trigger automatically after a successful Job 1:
 
 ## Job 4 - Jenkins (CDE)
 ### Steps
-2) For the `Office 365 Connector` section (Important fields):
-   - Tick `Restrict where this project can be run`
-   - `Label Expression`: Give the name of our `agent node`. This node will execute the builds of this project. 
-**NOTE**: This is a common error you may get below. To get rid of this just get rid of the trailing space at the end of the label and it should recognise the label. Error example: <br>
-![common_label_expression_error_example.png](images/common_label_expression_error_example.png)
