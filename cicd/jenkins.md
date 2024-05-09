@@ -49,6 +49,9 @@ Steps Overview:
 1) Let Jenkins SSH into our EC2 (without user input). Give Jenkins credentials (SSH Agent) so it has the private key of our EC2 instance.
 2) Jenkins will go to app folder.
 3) Jenkins will start app automatically and in the background (pm2 start)
+
+Job Plan Overview Diagram:
+![](images/job_plan.png)
 ## Job 1 - Jenkins (CI)
 ### Steps
 1) First login to Jenkins on your Master Node (ec2) to use the Jenkins service.
