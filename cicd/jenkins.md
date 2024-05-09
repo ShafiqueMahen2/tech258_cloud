@@ -2,7 +2,11 @@
 
 - [Tech 258 - Jenkins](#tech-258---jenkins)
   - [Jenkins Overview](#jenkins-overview)
-  - [Job Overview](#job-overview)
+  - [Job Plan](#job-plan)
+    - [**Job 1** - **CI**:](#job-1---ci)
+    - [**Job 2** - **CI-Merge**:](#job-2---ci-merge)
+    - [**Job 3** - **CD**:](#job-3---cd)
+    - [**Job 4** - **CDE**:](#job-4---cde)
   - [Job 1 - Jenkins (CI)](#job-1---jenkins-ci)
     - [Steps](#steps)
   - [Configuring Webhook](#configuring-webhook)
@@ -23,14 +27,28 @@ Jenkins is an open source automation server. It helps automate the parts of soft
 CICD with Jenkins: <br>
 ![jenkins.png](images/jenkins.png)
 
-## Job Overview
+## Job Plan
 Every task that is done on Jenkins is referred to as a `job`.
-In our case, we will have 3 jobs:
-1) **Job 1** - **CI** -> Push event to GitHub Repo will act as a trigger for a webhook to this job -> Builds latest version of app and runs automated tests.
-2) **Job 2** - **CI-Merge** -> If the previous job is successful it will trigger this job -> Merge the /dev branch to /main branch.
-3) **Job 3** - **CD** -> If the previous job is successful it will trigger this job -> Get the latest code from /main branch and push it to production.
-4) **Job 4** - **CDE** -> If the previous job is successful it will trigger this job -> Deploy the latest version of the app automatically.
-
+In our case, we will have 4 jobs:
+### **Job 1** - **CI**:
+Outline: Push event to GitHub Repo will act as a trigger for a webhook to this job -> Builds latest version of app and runs automated tests.
+### **Job 2** - **CI-Merge**:
+Steps Overview:
+1) Create a dev branch using `git checkout -b dev`
+2) Make a change locally and push to GitHub.
+3) If `Job 1` is successful, merge the code from `*/dev` to `*/main`.
+### **Job 3** - **CD**:
+Steps Overview:
+1) Create an EC2 instance (Ubuntu 18.04 LTS)
+2) Security Groups: Allow, SSH (22), Jenkins (8080), Node (3000), HTTP (80)
+3) Setup required dependencies (NodeJS, Nginx, PM2)
+4) Get the tested code from Job 2 onto App EC2.
+5) SSH in and manually start app process (npm install, npm start).
+### **Job 4** - **CDE**:
+Steps Overview: 
+1) Let Jenkins SSH into our EC2 (without user input). Give Jenkins credentials (SSH Agent) so it has the private key of our EC2 instance.
+2) Jenkins will go to app folder.
+3) Jenkins will start app automatically and in the background (pm2 start)
 ## Job 1 - Jenkins (CI)
 ### Steps
 1) First login to Jenkins on your Master Node (ec2) to use the Jenkins service.
