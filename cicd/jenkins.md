@@ -12,6 +12,9 @@
 ## Jenkins Overview
 Jenkins is an open source automation server. It helps automate the parts of software development related to building, testing, and deploying, facilitating continuous integration, and continuous delivery.
 
+CICD with Jenkins: <br>
+![jenkins.png](images/jenkins.png)
+
 ## How to set up a Jenkins job
 ### Steps
 1) First login to Jenkins on your Master Node (ec2) to use the Jenkins service.
