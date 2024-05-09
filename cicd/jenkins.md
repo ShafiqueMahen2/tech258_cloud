@@ -152,3 +152,8 @@ As we want Job 2 to trigger automatically after a successful Job 1:
 
 ## Job 4 - Jenkins (CDE)
 ### Steps
+2) For the `Office 365 Connector` section (Important fields):
+   - Tick `Restrict where this project can be run`
+   - `Label Expression`: Give the name of our `agent node`. This node will execute the builds of this project. 
+**NOTE**: This is a common error you may get below. To get rid of this just get rid of the trailing space at the end of the label and it should recognise the label. Error example: <br>
+![common_label_expression_error_example.png](images/common_label_expression_error_example.png)
