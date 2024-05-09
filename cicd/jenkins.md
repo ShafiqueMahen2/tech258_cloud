@@ -2,11 +2,19 @@
 
 - [Tech 258 - Jenkins](#tech-258---jenkins)
   - [Jenkins Overview](#jenkins-overview)
-  - [How to set up a Jenkins job](#how-to-set-up-a-jenkins-job)
+  - [Job Overview](#job-overview)
+  - [Job 1 - Jenkins (CI)](#job-1---jenkins-ci)
     - [Steps](#steps)
   - [Configuring Webhook](#configuring-webhook)
     - [Steps](#steps-1)
   - [Testing Webhook](#testing-webhook)
+  - [Job 2 - Jenkins (CI-Merge)](#job-2---jenkins-ci-merge)
+    - [Steps](#steps-2)
+    - [Testing](#testing)
+  - [Job 3 - Jenkins (CD)](#job-3---jenkins-cd)
+    - [Steps](#steps-3)
+  - [Job 4 - Jenkins (CDE)](#job-4---jenkins-cde)
+    - [Steps](#steps-4)
 
 
 ## Jenkins Overview
@@ -15,7 +23,15 @@ Jenkins is an open source automation server. It helps automate the parts of soft
 CICD with Jenkins: <br>
 ![jenkins.png](images/jenkins.png)
 
-## How to set up a Jenkins job
+## Job Overview
+Every task that is done on Jenkins is referred to as a `job`.
+In our case, we will have 3 jobs:
+1) CI -> Push event to GitHub Repo will act as a trigger for a webhook to this job -> Builds latest version of app and runs automated tests.
+2) CI-Merge -> If the previous job is successful it will trigger this job -> Merge the /dev branch to /main branch.
+3) CD -> If the previous job is successful it will trigger this job -> Get the latest code from /main branch and push it to production.
+4) CDE -> If the previous job is successful it will trigger this job -> Deploy the latest version of the app automatically.
+
+## Job 1 - Jenkins (CI)
 ### Steps
 1) First login to Jenkins on your Master Node (ec2) to use the Jenkins service.
 2) Click `New Item` or `Create new job` (this option will show if the master node is fresh) to start making a job.
@@ -94,3 +110,24 @@ Example: <br>
 ![](images/webhook_build_triggered_example.png)
 
 As we can see our build has triggered a second time (#2). We have successfully configured and tested our webhook!
+
+## Job 2 - Jenkins (CI-Merge)
+**NOTE**: Before creating this Job we have to update Job 1 to consider a few things:
+- Change `Branch Specifier` in `SCM` section to `*/dev` as we now want Jenkins to listen to changes on the `*/dev` branch now.
+
+### Steps
+
+### Testing
+As we want Job 2 to trigger automatically after a successful Job 1:
+- Revisit Job 1's configuration
+- Go to `Post-build Actions` section and `Add post-build Action`.
+- Select `Build other projects` and enter name of `Job 2` in `Projects to build field`.
+
+
+## Job 3 - Jenkins (CD)
+### Steps
+1) Create an App EC2 instance. Use `Ubuntu 18.04` as Image.
+2) Add `SSH Agent` in `Build Environment` section. For `Credentials` insert the contents of `tech258.pem` (private key) so Jenkins can SSH into our App EC2 instance to set up our app.
+
+## Job 4 - Jenkins (CDE)
+### Steps
