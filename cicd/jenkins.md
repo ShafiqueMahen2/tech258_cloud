@@ -26,10 +26,10 @@ CICD with Jenkins: <br>
 ## Job Overview
 Every task that is done on Jenkins is referred to as a `job`.
 In our case, we will have 3 jobs:
-1) CI -> Push event to GitHub Repo will act as a trigger for a webhook to this job -> Builds latest version of app and runs automated tests.
-2) CI-Merge -> If the previous job is successful it will trigger this job -> Merge the /dev branch to /main branch.
-3) CD -> If the previous job is successful it will trigger this job -> Get the latest code from /main branch and push it to production.
-4) CDE -> If the previous job is successful it will trigger this job -> Deploy the latest version of the app automatically.
+1) **Job 1** - **CI** -> Push event to GitHub Repo will act as a trigger for a webhook to this job -> Builds latest version of app and runs automated tests.
+2) **Job 2** - **CI-Merge** -> If the previous job is successful it will trigger this job -> Merge the /dev branch to /main branch.
+3) **Job 3** - **CD** -> If the previous job is successful it will trigger this job -> Get the latest code from /main branch and push it to production.
+4) **Job 4** - **CDE** -> If the previous job is successful it will trigger this job -> Deploy the latest version of the app automatically.
 
 ## Job 1 - Jenkins (CI)
 ### Steps
