@@ -285,3 +285,6 @@ EOF
 ```
 
 **IMPORTANT**: To get the script working correctly I had to update the contents of the `provisions.sh` script. I had to add `npm install` before installing pm2 & download node v10 rather than node v6!
+
+CD/CDE Working correctly example: <br>
+![cd_cde_example.png](images/cd_cde_example.png)
