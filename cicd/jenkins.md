@@ -263,8 +263,9 @@ ssh -o "StrictHostKeyChecking=no" ubuntu@34.244.217.61 <<EOF
 # Run update & upgrade
 sudo apt-get update -y
 sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
-# Install, restart and enable Nginx service
+# Install, configure reverse proxy, restart and enable Nginx service
 sudo DEBIAN_FRONTEND=noninteractive apt-get install nginx -y
+sudo sed -i '51s/.*/\t        proxy_pass http:\/\/localhost:3000;/' /etc/nginx/sites-enabled/default
 sudo systemctl restart nginx
 sudo systemctl enable nginx
 
