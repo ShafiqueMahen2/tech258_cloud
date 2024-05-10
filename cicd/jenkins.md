@@ -187,8 +187,105 @@ Now we can push via our `*/dev` branch to our Repo and see if Job 2 works automa
 
 ## Job 3 - Jenkins (CD)
 ### Steps
-1) Create an App EC2 instance. Use `Ubuntu 18.04` as Image.
-2) Add `SSH Agent` in `Build Environment` section. For `Credentials` insert the contents of `tech258.pem` (private key) so Jenkins can SSH into our App EC2 instance to set up our app.
+1) Create an App EC2 instance. Use `ami-02f0341ac93c96375` as Image.
+2) First login to Jenkins on your Master Node (ec2) to use the Jenkins service.
+3) Click `New Item` or `Create new job` (this option will show if the master node is fresh) to start making a job.
+4) Enter a `item name` that follows a suitable naming convention. (example: shafique-cd) Select `Freestyle project` for this case. Click `OK` when ready to continue.
+5) For the first section (Important fields):
+   
+- `Description`: Enter description of job (example: Building CD for nodejs app if tests passed & collecting new code from main branch to push to production on EC2)
+- Tick `GitHub Project` and enter `Project URL`. Put `.git` at the end of the URL.
+6) For the `Office 365 Connector` section (Important fields):
+   - Tick `Restrict where this project can be run`
+   - `Label Expression`: Give the name of our `agent node`. This node will execute the builds of this project. 
+**NOTE**: This is a common error you may get below. To get rid of this just get rid of the trailing space at the end of the label and it should recognise the label. Error example: <br>
+![common_label_expression_error_example.png](images/common_label_expression_error_example.png)
+7) For the `Build Environment` section (Important fields):
+- Tick `Provide Node & npm bin/ folder to PATH`
+- `NodeJS Installation`: Select `Sparta-Node-JS`. This has been set up for us to use already! This will also fill out the `npmrc file` and `cache location` fields.
+- Add `SSH Agent`: For `Credentials` insert the contents of `tech258.pem` (private key) so Jenkins can SSH into our App EC2 instance to set up our app.
+Example: <br>
+![ssh_agent_field_example.png](images/ssh_agent_field_example.png)
+8) For the `Build` section (Important fields):
+- Select `Execute shell`
+- For the command this is where we will run our shell script so that Jenkins can:
+  - Bypass key checking option
+  - SSH into EC2
+  - Run update & upgrade
+  - Install Nginx
+  - Copy new code
+  - Navigate to the folder where our script is (env then app folder environment/app)
+  - Install the required dependencies using script (run provision.sh)
+  - Navigate to App folder
+  - Install npm & pm2
+  - Start the app process in the background
 
+**NOTE: We will enter our final script in the field above. To ensure it works, we will break it down into sections and test manually:
+- First section: **Bypass key checking option -> Install Nginx step** commands:
+```
+# Bypass key checking option using StrictHostKeyChecking and SSH into EC2
+ssh -o "StrictHostKeyChecking=no" ubuntu@ec2-3-254-79-217.eu-west-1.compute.amazonaws.com <<EOF
+# Run update & upgrade
+sudo apt-get update -y
+sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
+# Install, restart and enable Nginx service
+sudo DEBIAN_FRONTEND=noninteractive apt-get install nginx -y
+sudo systemctl restart nginx
+sudo systemctl enable nginx
+
+EOF
+```
+To verify this has worked we will check the public IP of our app instance and should see the default nginx template: <br>
+![nginx_running_example.png](images/nginx_running_example.png)
+
+- Second section: **Copy new code** commands:
+```
+rsync -avz -e "ssh -o StrictHostKeyChecking=no" app ubuntu@ec2-3-254-79-217.eu-west-1.compute.amazonaws.com:/home/ubuntu
+rsync -avz -e "ssh -o StrictHostKeyChecking=no" environment ubuntu@ec2-3-254-79-217.eu-west-1.compute.amazonaws.com:/home/ubuntu
+```
+
+- Third section: **Navigate to our provision.sh script and run it to install dependencies required to run app** commands:
+```
+cd environment/app
+sudo chmod +x provision.sh
+./provision.sh
+```
+
+- Fourth section: **Navigate to App folder -> Run app step** commands:
+```
+cd app
+pm2 stop all
+pm2 start app.js app
+```
+
+Now that we have done everything manually we can combine it together to create a script for Jenkins to use in the `Build` section: Script
+```
+# Bypass key checking option using StrictHostKeyChecking and SSH into EC2
+ssh -o "StrictHostKeyChecking=no" ubuntu@34.244.217.61 <<EOF
+# Run update & upgrade
+sudo apt-get update -y
+sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
+# Install, restart and enable Nginx service
+sudo DEBIAN_FRONTEND=noninteractive apt-get install nginx -y
+sudo systemctl restart nginx
+sudo systemctl enable nginx
+
+EOF
+# Copy new code (app & environment folders) to App Instance
+rsync -avz -e "ssh -o StrictHostKeyChecking=no" app ubuntu@34.244.217.61:/home/ubuntu
+rsync -avz -e "ssh -o StrictHostKeyChecking=no" environment ubuntu@34.244.217.61:/home/ubuntu
+# SSH back in, Navigate to and run script to install app dependencies
+ssh -o "StrictHostKeyChecking=no" ubuntu@34.244.217.61 <<EOF
+sudo chmod +x ~/environment/app/provision.sh
+sudo bash ./environment/app/provision.sh
+# Navigate to app directory
+cd app
+# Gracefully kill/start a new app process using pm2
+pm2 stop all
+pm2 start app.js app
+EOF
+```
+
+**IMPORTANT**: To get the script working correctly I had to update the contents of the `provisions.sh` script. I had to add `npm install` before installing pm2 & download node v10 rather than node v6!
 ## Job 4 - Jenkins (CDE)
 ### Steps
