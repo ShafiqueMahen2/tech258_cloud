@@ -17,7 +17,6 @@
     - [Testing](#testing)
   - [Job 3 \& 4 - Jenkins (CD/CDE)](#job-3--4---jenkins-cdcde)
     - [Steps](#steps-3)
-    - [Steps](#steps-4)
 
 
 ## Jenkins Overview
@@ -286,4 +285,3 @@ EOF
 ```
 
 **IMPORTANT**: To get the script working correctly I had to update the contents of the `provisions.sh` script. I had to add `npm install` before installing pm2 & download node v10 rather than node v6!
-### Steps
