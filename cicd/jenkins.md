@@ -15,9 +15,8 @@
   - [Job 2 - Jenkins (CI-Merge)](#job-2---jenkins-ci-merge)
     - [Steps](#steps-2)
     - [Testing](#testing)
-  - [Job 3 - Jenkins (CD)](#job-3---jenkins-cd)
+  - [Job 3 \& 4 - Jenkins (CD/CDE)](#job-3--4---jenkins-cdcde)
     - [Steps](#steps-3)
-  - [Job 4 - Jenkins (CDE)](#job-4---jenkins-cde)
     - [Steps](#steps-4)
 
 
@@ -185,7 +184,7 @@ As we want Job 2 to trigger automatically after a successful Job 1:
 
 Now we can push via our `*/dev` branch to our Repo and see if Job 2 works automatically once Job 1 has been deemed successful.
 
-## Job 3 - Jenkins (CD)
+## Job 3 & 4 - Jenkins (CD/CDE)
 ### Steps
 1) Create an App EC2 instance. Use `ami-02f0341ac93c96375` as Image.
 2) First login to Jenkins on your Master Node (ec2) to use the Jenkins service.
@@ -287,5 +286,4 @@ EOF
 ```
 
 **IMPORTANT**: To get the script working correctly I had to update the contents of the `provisions.sh` script. I had to add `npm install` before installing pm2 & download node v10 rather than node v6!
-## Job 4 - Jenkins (CDE)
 ### Steps
