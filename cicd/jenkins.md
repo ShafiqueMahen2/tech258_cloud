@@ -285,7 +285,7 @@ EOF
 **IMPORTANT**: To get the script working correctly I had to update the contents of the `provisions.sh` script. I had to add `npm install` before installing pm2 & download node v10 rather than node v6!
 
 CD/CDE Working correctly example: <br>
-![cd_cde_example.png](images/cd_cde_example.png)
+![cd_example.png](images/cd_example.png)
 
 ## Job 4 - Jenkins (CDE)
 Now that we have the CD portion of our pipeline configured, we now want Jenkins to deploy our app automatically so the plan would be to:
@@ -332,7 +332,7 @@ pm2 start app.js app
 ```
 
 CD/CDE Working correctly example: <br>
-![cd_cde_example.png](images/cd_cde_example.png)
+![cde_example.png](images/cde_example.png)
 
 ## Combining CD/CDE
 If we wanted to combine the two jobs into one we'd have to combine our scripts. Combined Script:
