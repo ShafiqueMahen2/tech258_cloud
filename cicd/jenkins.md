@@ -19,6 +19,7 @@
     - [Steps](#steps-3)
   - [Job 4 - Jenkins (CDE)](#job-4---jenkins-cde)
     - [Steps](#steps-4)
+  - [Combining CD/CDE](#combining-cdcde)
 
 
 ## Jenkins Overview
@@ -332,3 +333,35 @@ pm2 start app.js app
 
 CD/CDE Working correctly example: <br>
 ![cd_cde_example.png](images/cd_cde_example.png)
+
+## Combining CD/CDE
+If we wanted to combine the two jobs into one we'd have to combine our scripts. Combined Script:
+```
+# App Instance IP
+EC2_IP=54.78.30.24
+# Bypass key checking option using StrictHostKeyChecking and SSH into EC2
+ssh -o "StrictHostKeyChecking=no" ubuntu@$EC2_IP <<EOF
+# Run update & upgrade
+sudo apt-get update -y
+sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
+# Install, restart and enable Nginx service
+sudo DEBIAN_FRONTEND=noninteractive apt-get install nginx -y
+sudo sed -i '51s/.*/\t        proxy_pass http:\/\/localhost:3000;/' /etc/nginx/sites-enabled/default
+sudo systemctl restart nginx
+sudo systemctl enable nginx
+
+EOF
+# Copy new code (app & environment folders) to App Instance
+rsync -avz -e "ssh -o StrictHostKeyChecking=no" app ubuntu@$EC2_IP:/home/ubuntu
+rsync -avz -e "ssh -o StrictHostKeyChecking=no" environment ubuntu@$EC2_IP:/home/ubuntu
+# SSH back in, Navigate to and run script to install app dependencies
+ssh -o "StrictHostKeyChecking=no" ubuntu@$EC2_IP <<EOF
+sudo chmod +x ~/environment/app/provision.sh
+sudo bash ./environment/app/provision.sh
+# Navigate to app directory
+cd app
+# Gracefully kill/start a new app process using pm2
+pm2 stop all
+pm2 start app.js app
+EOF
+```
