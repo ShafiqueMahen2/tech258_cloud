@@ -40,8 +40,10 @@ But to summarise the steps:
 - Configure Jenkins:
     - `admin user`: -> generated password can be found in the path: `/var/lib/jenkins/secrets/initialAdminPassword`
     - `Install Suggested Plugins`
-    - `Plugins we have to install manually`: Node and SSH-Agent
+    - `Plugins we have to install manually`: Node and SSH-Agent. Example: <br>
+    ![node_plugin_example.png](images/node_plugin_example.png)
     - `Manage Jenkins > Security > Git Host Key Verification Configuration`: Accept first connection. This will prevent any errors with SSH credentials for connections to our GitHub Repo.
+    ![git_host_key_verification_example.png](images/git_host_key_verification_example.png)
 
 ## Job Plan
 Every task that is done on Jenkins is referred to as a `job`.
