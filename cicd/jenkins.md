@@ -15,8 +15,10 @@
   - [Job 2 - Jenkins (CI-Merge)](#job-2---jenkins-ci-merge)
     - [Steps](#steps-2)
     - [Testing](#testing)
-  - [Job 3 \& 4 - Jenkins (CD/CDE)](#job-3--4---jenkins-cdcde)
+  - [Job 3 - Jenkins (CD)](#job-3---jenkins-cd)
     - [Steps](#steps-3)
+  - [Job 4 - Jenkins (CDE)](#job-4---jenkins-cde)
+    - [Steps](#steps-4)
 
 
 ## Jenkins Overview
@@ -183,7 +185,7 @@ As we want Job 2 to trigger automatically after a successful Job 1:
 
 Now we can push via our `*/dev` branch to our Repo and see if Job 2 works automatically once Job 1 has been deemed successful.
 
-## Job 3 & 4 - Jenkins (CD/CDE)
+## Job 3 - Jenkins (CD)
 ### Steps
 1) Create an App EC2 instance. Use `ami-02f0341ac93c96375` as Image.
 2) First login to Jenkins on your Master Node (ec2) to use the Jenkins service.
@@ -198,13 +200,22 @@ Now we can push via our `*/dev` branch to our Repo and see if Job 2 works automa
    - `Label Expression`: Give the name of our `agent node`. This node will execute the builds of this project. 
 **NOTE**: This is a common error you may get below. To get rid of this just get rid of the trailing space at the end of the label and it should recognise the label. Error example: <br>
 ![common_label_expression_error_example.png](images/common_label_expression_error_example.png)
-7) For the `Build Environment` section (Important fields):
+7) For the `Source Code Management` section (Important fields):
+
+- Select `Git` as that's what we are using for SCM.
+- `Repository URL`: Enter the SSH URL for the repo, this can be found on your GitHub Repo by clicking the `Code` button and going to the `SSH` tab of the `Clone` section.
+**NOTE**: This is a common error you may get below. This is because Jenkins is trying to ping our repo but it doesn't have permissions due to us setting up SSH. Once we give it the corresponding private key in the `Credentials` tab (next step), this error should resolve itself. Error example: <br>
+![common_credentials_error_example.png](images/common_credentials_error_example.png)
+- `Credentials`: As we have previously assigned a public key to our repo, we need to give Jenkins the corresponding private key to authenticate with our repo. We therefore have to click `Add` and put in our private key there.
+Example credentials configuration: <br>
+![credentials_example.png](images/credentials_example.png)
+8) For the `Build Environment` section (Important fields):
 - Tick `Provide Node & npm bin/ folder to PATH`
 - `NodeJS Installation`: Select `Sparta-Node-JS`. This has been set up for us to use already! This will also fill out the `npmrc file` and `cache location` fields.
 - Add `SSH Agent`: For `Credentials` insert the contents of `tech258.pem` (private key) so Jenkins can SSH into our App EC2 instance to set up our app.
 Example: <br>
 ![ssh_agent_field_example.png](images/ssh_agent_field_example.png)
-8) For the `Build` section (Important fields):
+9) For the `Build` section (Important fields):
 - Select `Execute shell`
 - For the command this is where we will run our shell script so that Jenkins can:
   - Bypass key checking option
@@ -214,9 +225,6 @@ Example: <br>
   - Copy new code
   - Navigate to the folder where our script is (env then app folder environment/app)
   - Install the required dependencies using script (run provision.sh)
-  - Navigate to App folder
-  - Install npm & pm2
-  - Start the app process in the background
 
 **NOTE: We will enter our final script in the field above. To ensure it works, we will break it down into sections and test manually:
 - First section: **Bypass key checking option -> Install Nginx step** commands:
@@ -249,13 +257,6 @@ sudo chmod +x provision.sh
 ./provision.sh
 ```
 
-- Fourth section: **Navigate to App folder -> Run app step** commands:
-```
-cd app
-pm2 stop all
-pm2 start app.js app
-```
-
 Now that we have done everything manually we can combine it together to create a script for Jenkins to use in the `Build` section: Script
 ```
 # Bypass key checking option using StrictHostKeyChecking and SSH into EC2
@@ -277,15 +278,57 @@ rsync -avz -e "ssh -o StrictHostKeyChecking=no" environment ubuntu@34.244.217.61
 ssh -o "StrictHostKeyChecking=no" ubuntu@34.244.217.61 <<EOF
 sudo chmod +x ~/environment/app/provision.sh
 sudo bash ./environment/app/provision.sh
-# Navigate to app directory
-cd app
-# Gracefully kill/start a new app process using pm2
-pm2 stop all
-pm2 start app.js app
 EOF
 ```
 
 **IMPORTANT**: To get the script working correctly I had to update the contents of the `provisions.sh` script. I had to add `npm install` before installing pm2 & download node v10 rather than node v6!
+
+CD/CDE Working correctly example: <br>
+![cd_cde_example.png](images/cd_cde_example.png)
+
+## Job 4 - Jenkins (CDE)
+Now that we have the CD portion of our pipeline configured, we now want Jenkins to deploy our app automatically so the plan would be to:
+1) Navigate to App folder
+2) Gracefully kill app process (for cases where it is already running)
+3) Start a new app process
+
+### Steps
+1) First login to Jenkins on your Master Node (ec2) to use the Jenkins service.
+2) Click `New Item` or `Create new job` (this option will show if the master node is fresh) to start making a job.
+3) Enter a `item name` that follows a suitable naming convention. (example: shafique-app-deployment) Select `Freestyle project` for this case. Click `OK` when ready to continue.
+4) For the first section (Important fields):
+   
+- `Description`: Enter description of job (example: shafique-app-deployment - on an ec2-ip: 54.78.30.24)
+- Tick `GitHub Project` and enter `Project URL`. Put `.git` at the end of the URL.
+5) For the `Office 365 Connector` section (Important fields):
+   - Tick `Restrict where this project can be run`
+   - `Label Expression`: Give the name of our `agent node`. This node will execute the builds of this project. 
+**NOTE**: This is a common error you may get below. To get rid of this just get rid of the trailing space at the end of the label and it should recognise the label. Error example: <br>
+![common_label_expression_error_example.png](images/common_label_expression_error_example.png)
+6) For the `Source Code Management` section (Important fields):
+
+- Select `Git` as that's what we are using for SCM.
+- `Repository URL`: Enter the SSH URL for the repo, this can be found on your GitHub Repo by clicking the `Code` button and going to the `SSH` tab of the `Clone` section.
+**NOTE**: This is a common error you may get below. This is because Jenkins is trying to ping our repo but it doesn't have permissions due to us setting up SSH. Once we give it the corresponding private key in the `Credentials` tab (next step), this error should resolve itself. Error example: <br>
+![common_credentials_error_example.png](images/common_credentials_error_example.png)
+- `Credentials`: As we have previously assigned a public key to our repo, we need to give Jenkins the corresponding private key to authenticate with our repo. We therefore have to click `Add` and put in our private key there.
+Example credentials configuration: <br>
+![credentials_example.png](images/credentials_example.png)
+7) For the `Build Environment` section (Important fields):
+- Tick `Provide Node & npm bin/ folder to PATH`
+- `NodeJS Installation`: Select `Sparta-Node-JS`. This has been set up for us to use already! This will also fill out the `npmrc file` and `cache location` fields.
+- Add `SSH Agent`: For `Credentials` insert the contents of `tech258.pem` (private key) so Jenkins can SSH into our App EC2 instance to set up our app.
+Example: <br>
+![ssh_agent_field_example.png](images/ssh_agent_field_example.png)
+8) For the `Build` section (Important fields):
+- Select `Execute shell`
+- For the command this is where we will run our shell script so that Jenkins can execute our plan. The commands would be:
+  So our commands for this would be:
+```
+cd app
+pm2 stop all
+pm2 start app.js app
+```
 
 CD/CDE Working correctly example: <br>
 ![cd_cde_example.png](images/cd_cde_example.png)
