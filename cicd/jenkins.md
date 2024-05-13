@@ -2,6 +2,7 @@
 
 - [Tech 258 - Jenkins](#tech-258---jenkins)
   - [Jenkins Overview](#jenkins-overview)
+  - [Building your own Jenkins Server](#building-your-own-jenkins-server)
   - [Job Plan](#job-plan)
     - [**Job 1** - **CI**:](#job-1---ci)
     - [**Job 2** - **CI-Merge**:](#job-2---ci-merge)
@@ -27,6 +28,20 @@ Jenkins is an open source automation server. It helps automate the parts of soft
 
 CICD with Jenkins: <br>
 ![jenkins.png](images/jenkins.png)
+
+## Building your own Jenkins Server
+The guide I used can be found [here](https://www.jenkins.io/doc/book/installing/linux/).
+
+But to summarise the steps:
+- Download OpenJDK 17 (I did this first unlike the guide as I got a `dpkg` configuration error, I had to reconfigure it again with the `sudo dpkg --configure -a`).
+- Create Jenkins repository and add an entry
+- Update packages to refresh Jenkins version locally
+- Install Jenkins
+- Configure Jenkins:
+    - `admin user`: -> generated password can be found in the path: `/var/lib/jenkins/secrets/initialAdminPassword`
+    - `Install Suggested Plugins`
+    - `Plugins we have to install manually`: Node and SSH-Agent
+    - `Manage Jenkins > Security > Git Host Key Verification Configuration`: Accept first connection. This will prevent any errors with SSH credentials for connections to our GitHub Repo.
 
 ## Job Plan
 Every task that is done on Jenkins is referred to as a `job`.
